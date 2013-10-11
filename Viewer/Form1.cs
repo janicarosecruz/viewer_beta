@@ -34,6 +34,7 @@ namespace Viewer
                 readFile(filename);
                 pnlHome.Visible = false;
                 pnlViewer.Visible = true;
+                ebookDetailToolStripMenuItem.Enabled = true;
             }
         }
 
@@ -45,8 +46,9 @@ namespace Viewer
         public void readFile(string filename){
             Epub epub = new Epub(@filename);
             epubExtract(@filename);
-            string author = epub.Title[0];
-            string title = epub.Creator[0];
+            string title = epub.Title[0];
+            string author = epub.Creator[0];
+            
             string htmlText = epub.GetContentAsHtml();
             string plainText = epub.GetContentAsPlainText();
             lblEpubDetail.Text = title + " - "+author;
@@ -59,6 +61,23 @@ namespace Viewer
                     webViewer.Url = new Uri(String.Format("file:///{0}/temp.html", curDir));
                 }
             }
+
+            string publisher = epub.Publisher[0];
+            //string id = epub.ID;
+            lblgauthor.Text = author;
+            lblgpub.Text = publisher;
+            //lblid.Text = id;
+
+        }
+
+        private void webViewer_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+
+        }
+
+        private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+
         }
 
         public void epubExtract(string filename){
@@ -92,11 +111,6 @@ namespace Viewer
 
         }
 
-        private void webViewer_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-
-        }
-
         private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             frmAbout form = new frmAbout();
@@ -109,6 +123,38 @@ namespace Viewer
             //Use the file
             File.Delete(tempFile);
             Application.Exit();
+        }
+
+        
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblid_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
