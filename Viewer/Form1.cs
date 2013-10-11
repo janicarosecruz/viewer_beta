@@ -68,16 +68,43 @@ namespace Viewer
             lblgpub.Text = publisher;
             //lblid.Text = id;
 
+
+            List<NavPoint> navPoint = epub.TOC;
+            var topNode = new TreeNode(title);
+            treeView1.Nodes.Add(topNode);
+            var treeNodes = new List<TreeNode>();
+            var childNodes = new List<TreeNode>();
+            foreach (Object obj in navPoint) {
+                
+            if (treeNodes.Count > 0)
+                 treeNodes.Add(new TreeNode(obj.ToString()));
+            }
+            treeView1.Nodes[0].Nodes.AddRange(childNodes.ToArray());
         }
 
         private void webViewer_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
+            //Get header of subject
 
+            //foreach (HtmlElement elementintable in webViewer.Document.GetElementById("{0}_xml").All)
+            //foreach (HtmlElement elementintable in webViewer.Document.GetElementsByTagName("body"))
+            foreach (HtmlElement elementintable in webViewer.Document.All)
+            {
+                if (elementintable.TagName == "a")
+                {
+
+                    //insert key and string to each node
+                    treeView1.Nodes.Add(elementintable.GetAttribute("href").Split('#')[1], elementintable.InnerText);
+                }
+            }
         }
 
         private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-
+            //navigate to selected anchor
+            //webViewer.Document.GetElementsByTagName(e.Node.Name).ScrollIntoView(true);
+            //webViewer.Document.GetElementById(e.Node.Name).ScrollIntoView(true);
+            webViewer.Document.GetElementById(e.Node.Name).ScrollIntoView(true);
         }
 
         public void epubExtract(string filename){
@@ -125,7 +152,15 @@ namespace Viewer
             Application.Exit();
         }
 
-        
+        private void ebookDetailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ebookDetailToolStripMenuItem.Checked == true) {
+                treeView1.Height = 269;
+            }
+            if (ebookDetailToolStripMenuItem.Checked == false) {
+                treeView1.Height = 478;
+            }
+        }
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {
